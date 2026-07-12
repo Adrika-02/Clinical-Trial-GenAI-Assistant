@@ -1,7 +1,7 @@
 {
-  "chosen_k": 4,
-  "silhouette_score": 0.0894,
-  "inertia": 3549.13,
+  "chosen_k": 3,
+  "silhouette_score": 0.082,
+  "inertia": 15320.04,
   "elbow_curve": {
     "k_values": [
       2,
@@ -13,22 +13,22 @@
       8
     ],
     "inertias": [
-      4058.7261809285774,
-      3780.3882851465237,
-      3549.1301450131014,
-      3396.254202954504,
-      3249.3082418997647,
-      3120.5632727182883,
-      3025.149524552005
+      16395.03701087794,
+      15320.040336443422,
+      14518.961809318007,
+      13860.277937305194,
+      13379.238674191794,
+      12941.740844662665,
+      12553.279740604956
     ],
     "silhouette_scores": [
-      0.10079526635639152,
-      0.08631986592111417,
-      0.08941915590215692,
-      0.08274246161302237,
-      0.08534916268213913,
-      0.08995785979161568,
-      0.088078203761466
+      0.0944888598579982,
+      0.08204820972487506,
+      0.07886077439075842,
+      0.08066483605208832,
+      0.08063192519125245,
+      0.08014731110345383,
+      0.07986514707822653
     ]
   },
   "feature_columns": [
@@ -45,64 +45,50 @@
   "cluster_profiles": [
     {
       "cluster": 0,
-      "n_patients": 129,
-      "mean_age": 55.085,
-      "mean_bmi": 26.872,
-      "mean_baseline_hba1c": 7.571,
-      "mean_outcome_score": 61.535,
-      "mean_ae_severity_rank": 0.643,
-      "severe_ae_rate": 0.0,
-      "any_ae_rate": 0.496,
-      "dropout_rate": 0.078,
-      "pct_drug_x": 0.512,
-      "business_label": "High Responders"
+      "n_patients": 748,
+      "mean_age": 58.529,
+      "mean_bmi": 29.552,
+      "mean_baseline_hba1c": 8.011,
+      "mean_outcome_score": 57.438,
+      "mean_ae_severity_rank": 0.588,
+      "severe_ae_rate": 0.001,
+      "any_ae_rate": 0.479,
+      "dropout_rate": 0.084,
+      "pct_drug_x": 0.443,
+      "business_label": "Non-Responders"
     },
     {
       "cluster": 1,
-      "n_patients": 120,
-      "mean_age": 59.775,
-      "mean_bmi": 31.324,
-      "mean_baseline_hba1c": 8.042,
-      "mean_outcome_score": 48.293,
-      "mean_ae_severity_rank": 2.225,
-      "severe_ae_rate": 0.383,
-      "any_ae_rate": 0.992,
-      "dropout_rate": 0.408,
-      "pct_drug_x": 0.692,
-      "business_label": "AE-Prone"
+      "n_patients": 772,
+      "mean_age": 51.01,
+      "mean_bmi": 31.073,
+      "mean_baseline_hba1c": 8.155,
+      "mean_outcome_score": 59.963,
+      "mean_ae_severity_rank": 0.606,
+      "severe_ae_rate": 0.0,
+      "any_ae_rate": 0.505,
+      "dropout_rate": 0.085,
+      "pct_drug_x": 0.495,
+      "business_label": "High Responders"
     },
     {
       "cluster": 2,
-      "n_patients": 112,
-      "mean_age": 49.232,
-      "mean_bmi": 32.67,
-      "mean_baseline_hba1c": 8.994,
-      "mean_outcome_score": 58.538,
-      "mean_ae_severity_rank": 0.795,
-      "severe_ae_rate": 0.0,
-      "any_ae_rate": 0.607,
-      "dropout_rate": 0.071,
-      "pct_drug_x": 0.438,
-      "business_label": "Stable / Average Responders"
-    },
-    {
-      "cluster": 3,
-      "n_patients": 139,
-      "mean_age": 53.791,
-      "mean_bmi": 28.333,
-      "mean_baseline_hba1c": 8.098,
-      "mean_outcome_score": 55.832,
-      "mean_ae_severity_rank": 0.604,
-      "severe_ae_rate": 0.0,
-      "any_ae_rate": 0.468,
-      "dropout_rate": 0.065,
-      "pct_drug_x": 0.374,
-      "business_label": "Non-Responders"
+      "n_patients": 480,
+      "mean_age": 55.09,
+      "mean_bmi": 29.983,
+      "mean_baseline_hba1c": 8.039,
+      "mean_outcome_score": 45.984,
+      "mean_ae_severity_rank": 2.194,
+      "severe_ae_rate": 0.335,
+      "any_ae_rate": 0.998,
+      "dropout_rate": 0.298,
+      "pct_drug_x": 0.598,
+      "business_label": "AE-Prone"
     }
   ],
   "pca_explained_variance": [
-    0.1522,
-    0.1239
+    0.137,
+    0.1205
   ],
   "elbow_plot_path": "models/cluster_plots/elbow_method.png",
   "pca_plot_path": "models/cluster_plots/pca_clusters.png"

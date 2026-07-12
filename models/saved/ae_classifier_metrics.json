@@ -1,57 +1,57 @@
 {
-  "accuracy": 0.9217,
-  "precision_macro": 0.7865,
-  "recall_macro": 0.9487,
-  "f1_macro": 0.851,
-  "f1_weighted": 0.9277,
+  "accuracy": 0.9271,
+  "precision_macro": 0.7797,
+  "recall_macro": 0.8989,
+  "f1_macro": 0.8291,
+  "f1_weighted": 0.9323,
   "classification_report": {
     "No AE": {
-      "precision": 0.9957356076759062,
-      "recall": 0.9192913385826772,
-      "f1-score": 0.9559877175025588,
-      "support": 508.0
+      "precision": 0.9932185706833594,
+      "recall": 0.9296875,
+      "f1-score": 0.9604035308953341,
+      "support": 2048.0
     },
     "Mild AE": {
-      "precision": 0.6495726495726496,
-      "recall": 0.926829268292683,
-      "f1-score": 0.7638190954773869,
-      "support": 82.0
+      "precision": 0.6628959276018099,
+      "recall": 0.9184952978056427,
+      "f1-score": 0.7700394218134035,
+      "support": 319.0
     },
     "Severe AE": {
-      "precision": 0.7142857142857143,
-      "recall": 1.0,
-      "f1-score": 0.8333333333333334,
-      "support": 10.0
+      "precision": 0.6829268292682927,
+      "recall": 0.8484848484848485,
+      "f1-score": 0.7567567567567568,
+      "support": 33.0
     },
-    "accuracy": 0.9216666666666666,
+    "accuracy": 0.9270833333333334,
     "macro avg": {
-      "precision": 0.7865313238447568,
-      "recall": 0.9487068689584534,
-      "f1-score": 0.8510467154377598,
-      "support": 600.0
+      "precision": 0.7796804425178206,
+      "recall": 0.8988892154301636,
+      "f1-score": 0.8290665698218316,
+      "support": 2400.0
     },
     "weighted avg": {
-      "precision": 0.9437358385119579,
-      "recall": 0.9216666666666666,
-      "f1-score": 0.9276804327562983,
-      "support": 600.0
+      "precision": 0.9450466745959796,
+      "recall": 0.9270833333333334,
+      "f1-score": 0.9323008249187887,
+      "support": 2400.0
     }
   },
   "confusion_matrix": [
     [
-      467,
-      41,
+      1904,
+      144,
       0
     ],
     [
-      2,
-      76,
-      4
+      13,
+      293,
+      13
     ],
     [
       0,
-      0,
-      10
+      5,
+      28
     ]
   ],
   "confusion_matrix_labels": [
@@ -60,16 +60,16 @@
     "Severe AE"
   ],
   "business_impact": {
-    "test_set_size": 600,
-    "manual_coded_ae_count": 73,
-    "nlp_detected_ae_count": 131,
-    "uplift_pct": 79.5,
-    "manually_missed_ae_count": 19,
-    "nlp_recovered_of_missed": 19,
-    "recovery_rate_pct_of_missed": 100.0
+    "test_set_size": 2400,
+    "manual_coded_ae_count": 255,
+    "nlp_detected_ae_count": 483,
+    "uplift_pct": 89.4,
+    "manually_missed_ae_count": 97,
+    "nlp_recovered_of_missed": 94,
+    "recovery_rate_pct_of_missed": 96.9
   },
-  "train_size": 2400,
-  "test_size": 600,
+  "train_size": 9600,
+  "test_size": 2400,
   "classes": [
     "No AE",
     "Mild AE",

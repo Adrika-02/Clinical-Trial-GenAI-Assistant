@@ -28,16 +28,16 @@ def _load_stats() -> dict:
         return json.load(f)
 
 
-hero_banner(
-    "🧪 Trial Overview",
-    "Drug X vs. Placebo — Phase III Efficacy &amp; Safety Trial, analyzed end-to-end with real statistics, ML, and GenAI agents.",
-    chips=["Phase III", "500 Patients", "GenAI-Powered"],
-)
-
 patients = load_patients()
 visits = load_visits()
 ae = load_adverse_events()
 stats = _load_stats()
+
+hero_banner(
+    "🧪 Trial Overview",
+    "Drug X vs. Placebo — Phase III Efficacy &amp; Safety Trial, analyzed end-to-end with real statistics, ML, and GenAI agents.",
+    chips=["Phase III", f"{len(patients):,} Patients", "GenAI-Powered"],
+)
 
 # --- KPI cards ---
 n_total = len(patients)
@@ -54,7 +54,7 @@ overall_ae_rate = ae_ever["ae_occurred"].mean() * 100
 
 st.markdown(
     '<div class="kpi-row">'
-    + kpi_card("👥", "Total Patients", f"{n_total}")
+    + kpi_card("👥", "Total Patients", f"{n_total:,}")
     + kpi_card("✅", "Trial Completion Rate", f"{completion_rate:.1f}%")
     + kpi_card("🎯", "Patients with HbA1c &lt; 7% (Wk 24)", f"{hba1c_control_rate:.1f}%")
     + kpi_card("⚠️", "Overall Adverse Event Rate", f"{overall_ae_rate:.1f}%")

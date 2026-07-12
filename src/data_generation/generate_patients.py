@@ -7,7 +7,7 @@ for a Type 2 diabetes population enrolling in a Phase III trial.
 import numpy as np
 import pandas as pd
 
-N_PATIENTS = 500
+N_PATIENTS = 2000
 N_PER_ARM = N_PATIENTS // 2
 VISIT_WEEKS = [0, 2, 4, 8, 12, 24]
 ENROLLMENT_START = pd.Timestamp("2024-01-08")

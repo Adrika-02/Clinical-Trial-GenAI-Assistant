@@ -2,64 +2,64 @@
   "global_severe_ae": {
     "top_features": [
       {
-        "feature": "review",
-        "mean_abs_shap": 0.15184
-      },
-      {
         "feature": "pende",
-        "mean_abs_shap": 0.14797
+        "mean_abs_shap": 0.1992
       },
       {
         "feature": "suspend",
-        "mean_abs_shap": 0.14235
+        "mean_abs_shap": 0.17039
       },
       {
-        "feature": "urgent",
-        "mean_abs_shap": 0.14189
-      },
-      {
-        "feature": "evaluation",
-        "mean_abs_shap": 0.13369
-      },
-      {
-        "feature": "chest",
-        "mean_abs_shap": 0.1265
+        "feature": "review",
+        "mean_abs_shap": 0.17015
       },
       {
         "feature": "severe",
-        "mean_abs_shap": 0.12453
+        "mean_abs_shap": 0.16745
+      },
+      {
+        "feature": "urgent",
+        "mean_abs_shap": 0.15352
+      },
+      {
+        "feature": "evaluation",
+        "mean_abs_shap": 0.1528
       },
       {
         "feature": "safety assessment",
-        "mean_abs_shap": 0.088
-      },
-      {
-        "feature": "hold",
-        "mean_abs_shap": 0.088
-      },
-      {
-        "feature": "assessment",
-        "mean_abs_shap": 0.088
-      },
-      {
-        "feature": "pende safety",
-        "mean_abs_shap": 0.088
-      },
-      {
-        "feature": "hold pende",
-        "mean_abs_shap": 0.088
+        "mean_abs_shap": 0.13409
       },
       {
         "feature": "drug hold",
-        "mean_abs_shap": 0.088
+        "mean_abs_shap": 0.13409
       },
       {
-        "feature": "visit study",
-        "mean_abs_shap": 0.08666
+        "feature": "hold",
+        "mean_abs_shap": 0.13409
       },
       {
-        "feature": "clinical review",
-        "mean_abs_shap": 0.08085
+        "feature": "hold pende",
+        "mean_abs_shap": 0.13409
+      },
+      {
+        "feature": "assessment",
+        "mean_abs_shap": 0.13409
+      },
+      {
+        "feature": "pende safety",
+        "mean_abs_shap": 0.13409
+      },
+      {
+        "feature": "chest",
+        "mean_abs_shap": 0.1075
+      },
+      {
+        "feature": "refer evaluation",
+        "mean_abs_shap": 0.0767
+      },
+      {
+        "feature": "treatment temporarily",
+        "mean_abs_shap": 0.0767
       }
     ],
     "plot_path": "models/shap_plots/global_summary_severe_ae.png"
@@ -67,82 +67,82 @@
   "global_mild_ae": {
     "top_features": [
       {
-        "feature": "stomach",
-        "mean_abs_shap": 0.06118
-      },
-      {
-        "feature": "day",
-        "mean_abs_shap": 0.05666
-      },
-      {
         "feature": "resolve",
-        "mean_abs_shap": 0.05505
-      },
-      {
-        "feature": "moderate",
-        "mean_abs_shap": 0.05435
-      },
-      {
-        "feature": "chest",
-        "mean_abs_shap": 0.05171
-      },
-      {
-        "feature": "patient experience",
-        "mean_abs_shap": 0.04964
-      },
-      {
-        "feature": "experience",
-        "mean_abs_shap": 0.04964
+        "mean_abs_shap": 0.06408
       },
       {
         "feature": "mg",
-        "mean_abs_shap": 0.04833
+        "mean_abs_shap": 0.06181
       },
       {
-        "feature": "mild",
-        "mean_abs_shap": 0.03775
+        "feature": "moderate",
+        "mean_abs_shap": 0.06105
       },
       {
-        "feature": "bp slightly",
-        "mean_abs_shap": 0.03381
+        "feature": "experience",
+        "mean_abs_shap": 0.05949
       },
       {
-        "feature": "elevate",
-        "mean_abs_shap": 0.03381
+        "feature": "patient experience",
+        "mean_abs_shap": 0.05949
       },
       {
-        "feature": "slightly elevate",
-        "mean_abs_shap": 0.03381
+        "feature": "fatigue",
+        "mean_abs_shap": 0.05523
       },
       {
-        "feature": "queasiness",
-        "mean_abs_shap": 0.0329
+        "feature": "day",
+        "mean_abs_shap": 0.05089
       },
       {
-        "feature": "sick",
-        "mean_abs_shap": 0.03165
+        "feature": "dizziness",
+        "mean_abs_shap": 0.05082
       },
       {
-        "feature": "sick stomach",
-        "mean_abs_shap": 0.03165
+        "feature": "chest",
+        "mean_abs_shap": 0.04973
+      },
+      {
+        "feature": "monitor",
+        "mean_abs_shap": 0.04761
+      },
+      {
+        "feature": "dose",
+        "mean_abs_shap": 0.04392
+      },
+      {
+        "feature": "measure visit",
+        "mean_abs_shap": 0.04355
+      },
+      {
+        "feature": "measure",
+        "mean_abs_shap": 0.04355
+      },
+      {
+        "feature": "bp measure",
+        "mean_abs_shap": 0.04355
+      },
+      {
+        "feature": "daily",
+        "mean_abs_shap": 0.03906
       }
     ],
     "plot_path": "models/shap_plots/global_summary_mild_ae.png"
   },
   "local_examples": {
     "No AE": {
-      "note_text": "Patient reports feeling well since last visit. HbA1c stable at 8.2. No new complaints. Continue current dose. History of intermittent tension headaches predates enrollment; no change this cycle.",
+      "note_text": "Patient reports feeling well since last visit. HbA1c stable at 8.1. No new complaints. Continue current dose. History of intermittent tension headaches predates enrollment; no change this cycle.",
       "business_narrative": "The words 'no', 'visit stable' and 'stable' were the strongest predictors of No AE classification in this note.",
       "plot_path": "models/shap_plots/local_waterfall_no_ae.png"
     },
     "Mild AE": {
-      "note_text": "Moderate nausea reported. Dose reduced from 20mg to 10mg. Follow-up scheduled in 2 weeks.",
-      "business_narrative": "The words 'mg', 'moderate' and 'nausea' were the strongest predictors of Mild AE classification in this note.",
+      "note_text": "Patient reports mild feeling unsteady on their feet following Day 9 dose. BP measured at 127/83 at this visit. No changes to medication recommended.",
+      "business_narrative": "The words 'bp measure', 'measure' and 'measure visit' were the strongest predictors of Mild AE classification in this note.",
       "plot_path": "models/shap_plots/local_waterfall_mild_ae.png"
     },
     "Severe AE": {
-      "note_text": "Feeling unsteady on their feet serious enough to warrant an urgent evaluation this visit. Study drug held pending safety assessment.",
-      "business_narrative": "The words 'urgent', 'pende' and 'evaluation' were the strongest predictors of Severe AE classification in this note.",
+      "note_text": "Severe chest pain reported at Week 4 visit. BP measured at 120/85 at this visit. Patient referred for further evaluation. Treatment temporarily suspended.",
+      "business_narrative": "The words 'pain report', 'severe' and 'suspend' were the strongest predictors of Severe AE classification in this note.",
       "plot_path": "models/shap_plots/local_waterfall_severe_ae.png"
     }
   }

@@ -1,164 +1,164 @@
 {
   "normality_check_outcome_score": {
     "test_name": "Shapiro-Wilk normality test",
-    "statistic": 0.9949,
-    "p_value": 0.100311,
+    "statistic": 0.9984,
+    "p_value": 0.049737,
     "alpha": 0.05,
-    "significant": false,
-    "plain_english": "Shapiro-Wilk test on primary outcome score (W=0.995, p=0.100): data appears normally distributed \u2014 a t-test/ANOVA is appropriate.",
-    "is_normal": 1
+    "significant": true,
+    "plain_english": "Shapiro-Wilk test on primary outcome score (W=0.998, p=0.050): data deviates significantly from a normal distribution \u2014 a non-parametric test (Kruskal-Wallis / Mann-Whitney) is recommended.",
+    "is_normal": 0
   },
   "primary_endpoint_ttest": {
     "test_name": "Welch's t-test",
-    "statistic": 7.9848,
+    "statistic": 18.0543,
     "p_value": 0.0,
     "alpha": 0.05,
     "significant": true,
-    "plain_english": "On average, the Drug X arm scored 7.90 points higher than Placebo on primary outcome score (0-100) (60.05 vs 52.15). This difference is statistically significant (Welch's t=7.98, p=< 0.001), meaning we would see a difference this large by chance in fewer than 0.1% of repeated trials. The effect size is medium (Cohen's d = 0.71).",
-    "mean_drug_x": 60.0516,
-    "mean_placebo": 52.1488,
-    "cohens_d": 0.7142,
-    "effect_size_interpretation": "medium",
-    "n_a": 250,
-    "n_b": 250
+    "plain_english": "On average, the Drug X arm scored 9.05 points higher than Placebo on primary outcome score (0-100) (60.19 vs 51.14). This difference is statistically significant (Welch's t=18.05, p=< 0.001), meaning we would see a difference this large by chance in fewer than 0.1% of repeated trials. The effect size is large (Cohen's d = 0.81).",
+    "mean_drug_x": 60.1879,
+    "mean_placebo": 51.1397,
+    "cohens_d": 0.8074,
+    "effect_size_interpretation": "large",
+    "n_a": 1000,
+    "n_b": 1000
   },
   "ci_outcome_drug_x": {
     "metric_name": "Drug X primary outcome score",
-    "mean": 60.0516,
-    "lower": 58.5058,
-    "upper": 61.5974,
+    "mean": 60.1879,
+    "lower": 59.3895,
+    "upper": 60.9863,
     "confidence": 0.95,
-    "n": 250,
-    "plain_english": "The 95% confidence interval for Drug X primary outcome score is [58.51, 61.60] around a sample mean of 60.05 (n=250)."
+    "n": 1000,
+    "plain_english": "The 95% confidence interval for Drug X primary outcome score is [59.39, 60.99] around a sample mean of 60.19 (n=1000)."
   },
   "ci_outcome_placebo": {
     "metric_name": "Placebo primary outcome score",
-    "mean": 52.1488,
-    "lower": 50.9613,
-    "upper": 53.3363,
+    "mean": 51.1397,
+    "lower": 50.5655,
+    "upper": 51.7139,
     "confidence": 0.95,
-    "n": 250,
-    "plain_english": "The 95% confidence interval for Placebo primary outcome score is [50.96, 53.34] around a sample mean of 52.15 (n=250)."
+    "n": 1000,
+    "plain_english": "The 95% confidence interval for Placebo primary outcome score is [50.57, 51.71] around a sample mean of 51.14 (n=1000)."
   },
   "hba1c_control_rate_by_arm": {
-    "Drug X": 0.476,
-    "Placebo": 0.16
+    "Drug X": 0.511,
+    "Placebo": 0.194
   },
   "hba1c_control_chisq": {
     "test_name": "Chi-square test of independence",
-    "statistic": 56.1058,
+    "statistic": 218.7486,
     "p_value": 0.0,
     "alpha": 0.05,
     "significant": true,
-    "plain_english": "A chi-square test of independence was run on HbA1c <7% control at Week 24 across treatment arms (chi2=56.11, dof=1, p=< 0.001). There is a statistically significant association between treatment arm and HbA1c <7% control at Week 24.",
+    "plain_english": "A chi-square test of independence was run on HbA1c <7% control at Week 24 across treatment arms (chi2=218.75, dof=1, p=< 0.001). There is a statistically significant association between treatment arm and HbA1c <7% control at Week 24.",
     "degrees_of_freedom": 1,
     "contingency_table": {
       "false": {
-        "Drug X": 131,
-        "Placebo": 210
+        "Drug X": 489,
+        "Placebo": 806
       },
       "true": {
-        "Drug X": 119,
-        "Placebo": 40
+        "Drug X": 511,
+        "Placebo": 194
       }
     },
     "rates_by_arm": {
       "false": {
-        "Drug X": 0.524,
-        "Placebo": 0.84
+        "Drug X": 0.489,
+        "Placebo": 0.806
       },
       "true": {
-        "Drug X": 0.476,
-        "Placebo": 0.16
+        "Drug X": 0.511,
+        "Placebo": 0.194
       }
     }
   },
   "ae_occurrence_chisq": {
     "test_name": "Chi-square test of independence",
-    "statistic": 43.3493,
+    "statistic": 127.6075,
     "p_value": 0.0,
     "alpha": 0.05,
     "significant": true,
-    "plain_english": "A chi-square test of independence was run on adverse event occurrence across treatment arms (chi2=43.35, dof=1, p=< 0.001). There is a statistically significant association between treatment arm and adverse event occurrence.",
+    "plain_english": "A chi-square test of independence was run on adverse event occurrence across treatment arms (chi2=127.61, dof=1, p=< 0.001). There is a statistically significant association between treatment arm and adverse event occurrence.",
     "degrees_of_freedom": 1,
     "contingency_table": {
       "false": {
-        "Drug X": 56,
-        "Placebo": 128
+        "Drug X": 263,
+        "Placebo": 510
       },
       "true": {
-        "Drug X": 194,
-        "Placebo": 122
+        "Drug X": 737,
+        "Placebo": 490
       }
     },
     "rates_by_arm": {
       "false": {
-        "Drug X": 0.224,
-        "Placebo": 0.512
+        "Drug X": 0.263,
+        "Placebo": 0.51
       },
       "true": {
-        "Drug X": 0.776,
-        "Placebo": 0.488
+        "Drug X": 0.737,
+        "Placebo": 0.49
       }
     }
   },
   "ae_severity_class_chisq": {
     "test_name": "Chi-square test of independence",
-    "statistic": 49.8997,
+    "statistic": 196.7068,
     "p_value": 0.0,
     "alpha": 0.05,
     "significant": true,
-    "plain_english": "A chi-square test of independence was run on adverse event severity class across treatment arms (chi2=49.90, dof=2, p=< 0.001). There is a statistically significant association between treatment arm and adverse event severity class.",
+    "plain_english": "A chi-square test of independence was run on adverse event severity class across treatment arms (chi2=196.71, dof=2, p=< 0.001). There is a statistically significant association between treatment arm and adverse event severity class.",
     "degrees_of_freedom": 2,
     "contingency_table": {
       "Mild AE": {
-        "Drug X": 257,
-        "Placebo": 155
+        "Drug X": 991,
+        "Placebo": 601
       },
       "No AE": {
-        "Drug X": 1205,
-        "Placebo": 1336
+        "Drug X": 4869,
+        "Placebo": 5372
       },
       "Severe AE": {
-        "Drug X": 38,
-        "Placebo": 9
+        "Drug X": 140,
+        "Placebo": 27
       }
     },
     "rates_by_arm": {
       "Mild AE": {
-        "Drug X": 0.17133333333333334,
-        "Placebo": 0.10333333333333333
+        "Drug X": 0.16516666666666666,
+        "Placebo": 0.10016666666666667
       },
       "No AE": {
-        "Drug X": 0.8033333333333333,
-        "Placebo": 0.8906666666666667
+        "Drug X": 0.8115,
+        "Placebo": 0.8953333333333333
       },
       "Severe AE": {
-        "Drug X": 0.025333333333333333,
-        "Placebo": 0.006
+        "Drug X": 0.023333333333333334,
+        "Placebo": 0.0045
       }
     }
   },
   "kruskal_hba1c_by_ae_class": {
     "test_name": "Kruskal-Wallis H-test",
-    "statistic": 35.4141,
+    "statistic": 83.7446,
     "p_value": 0.0,
     "alpha": 0.05,
     "significant": true,
-    "plain_english": "A Kruskal-Wallis test compared HbA1c reduction by Week 24, grouped by worst AE severity across 3 groups without assuming normally distributed data (H=35.41, p=< 0.001). The groups differ significantly in HbA1c reduction by Week 24, grouped by worst AE severity. Median values: No AE=0.32, Mild AE=0.67, Severe AE=0.44.",
+    "plain_english": "A Kruskal-Wallis test compared HbA1c reduction by Week 24, grouped by worst AE severity across 3 groups without assuming normally distributed data (H=83.74, p=< 0.001). The groups differ significantly in HbA1c reduction by Week 24, grouped by worst AE severity. Median values: No AE=0.40, Mild AE=0.67, Severe AE=0.58.",
     "medians": {
-      "No AE": 0.3200000000000003,
-      "Mild AE": 0.665,
-      "Severe AE": 0.4350000000000005
+      "No AE": 0.39999999999999947,
+      "Mild AE": 0.6699999999999999,
+      "Severe AE": 0.5750000000000002
     }
   },
   "summary": {
-    "n_patients": 500,
-    "n_drug_x": 250,
-    "n_placebo": 250,
-    "completion_rate": 0.848,
-    "overall_ae_rate": 0.632,
-    "ae_rate_drug_x": 0.776,
-    "ae_rate_placebo": 0.488
+    "n_patients": 2000,
+    "n_drug_x": 1000,
+    "n_placebo": 1000,
+    "completion_rate": 0.864,
+    "overall_ae_rate": 0.6135,
+    "ae_rate_drug_x": 0.737,
+    "ae_rate_placebo": 0.49
   }
 }

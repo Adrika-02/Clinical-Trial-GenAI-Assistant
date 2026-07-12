@@ -47,11 +47,11 @@ clinical-trial-genai-assistant/
 ## Status
 
 - [x] Step 1 — Project scaffold + architecture diagram
-- [x] Step 2 — Synthetic data generation + SQLite (500 patients, 3,000 visits, 3,000 AE records, 3,000 clinical notes)
+- [x] Step 2 — Synthetic data generation + SQLite (2,000 patients, 12,000 visits, 12,000 AE records, 12,000 clinical notes)
 - [x] Step 3 — Statistical analysis module (Welch's t-test, chi-square, Cohen's d, Kruskal-Wallis, 95% CIs)
-- [x] Step 4 — NLP adverse event classifier (SpaCy preprocessing + medical NER, TF-IDF + Logistic Regression, 92.2% accuracy / 0.851 F1-macro)
+- [x] Step 4 — NLP adverse event classifier (SpaCy preprocessing + medical NER, TF-IDF + Logistic Regression, 92.7% accuracy / 0.829 F1-macro)
 - [x] Step 5 — SHAP explainability (global + local, per-class linear explainer)
-- [x] Step 6 — K-Means patient clustering (k=4, silhouette=0.089, PCA projection)
+- [x] Step 6 — K-Means patient clustering (k=3, silhouette=0.082, PCA projection)
 - [x] Step 7 — 3 LangChain agents (data analysis, clinical notes, insight generation)
 - [x] Step 8 — Streamlit dashboard (6 pages)
 - [x] Step 9 — PDF executive report
@@ -60,9 +60,9 @@ clinical-trial-genai-assistant/
 
 ## Business impact (headline numbers)
 
-- **79.5% more adverse events detected** by the NLP classifier vs. manual CRF coding on the test set, recovering **100% of the 19 cases manual coding missed entirely**.
-- **Primary endpoint statistically significant**: Drug X +7.90 points vs. placebo (p < 0.001, Cohen's d = 0.71).
-- **AE-Prone patient cluster (24% of patients) accounts for 100% of severe adverse events** and a 40.8% dropout rate — the clearest, highest-leverage safety-monitoring target in the trial.
+- **89.4% more adverse events detected** by the NLP classifier vs. manual CRF coding on the test set, recovering **96.9% of the 97 cases manual coding missed entirely** (94 of 97).
+- **Primary endpoint statistically significant**: Drug X +9.05 points vs. placebo (p < 0.001, Cohen's d = 0.81, large effect).
+- **AE-Prone patient cluster (24.0% of patients) accounts for 161 of 162 severe adverse events trial-wide (99.4%)** and a 29.8% dropout rate — the clearest, highest-leverage safety-monitoring target in the trial.
 - **Executive report compiles in under 20 seconds**, replacing a multi-day manual turnaround.
 
 Full breakdown with context: [docs/business_impact.md](docs/business_impact.md)
@@ -83,7 +83,7 @@ Generate the synthetic clinical trial dataset and SQLite database:
 python -m src.data_generation.build_database
 ```
 
-This produces `data/clinical_trial.db` with four tables (`patients`, `visits`, `adverse_events`, `clinical_notes`) plus raw CSV exports in `data/raw/` for use as upload-demo files. Current output: **500 patients** (250 Drug X / 250 Placebo), **3,000 visits** (6 per patient), **3,000 adverse-event records**, **3,000 clinical notes**. The treatment effect and adverse-event burden are simulated (not hardcoded) via a per-patient dose-response curve, so every downstream statistical test and ML model is fit against a genuinely emergent signal — e.g. mean HbA1c drops from 8.11→7.11 in the Drug X arm vs 8.20→7.94 on placebo by Week 24, and Drug X carries a higher adverse-event and dropout rate, consistent with an active drug vs. placebo comparison.
+This produces `data/clinical_trial.db` with four tables (`patients`, `visits`, `adverse_events`, `clinical_notes`) plus raw CSV exports in `data/raw/` for use as upload-demo files. Current output: **2,000 patients** (1,000 Drug X / 1,000 Placebo), **12,000 visits** (6 per patient), **12,000 adverse-event records**, **12,000 clinical notes**. The treatment effect and adverse-event burden are simulated (not hardcoded) via a per-patient dose-response curve, so every downstream statistical test and ML model is fit against a genuinely emergent signal — e.g. mean HbA1c drops from 8.08→7.02 in the Drug X arm vs 8.07→7.82 on placebo by Week 24, and Drug X carries a higher adverse-event and dropout rate (73.7% vs 49.0% any-AE rate), consistent with an active drug vs. placebo comparison.
 
 Run the statistical analysis suite (writes `data/processed/stats_results.json`):
 
@@ -95,12 +95,12 @@ python -m src.stats.run_analysis
 
 | Test | Result |
 |---|---|
-| Welch's t-test (primary outcome score, Drug X vs Placebo) | t=7.98, **p<0.001**, means 60.05 vs 52.15 |
-| Cohen's d (effect size) | **d=0.71** (medium-to-large effect) |
-| Chi-square (HbA1c <7% control at Week 24) | chi2=56.11, dof=1, **p<0.001** |
-| Chi-square (adverse event occurrence, any severity) | chi2=43.35, dof=1, **p<0.001** |
-| Chi-square (AE severity class distribution) | chi2=49.90, dof=2, **p<0.001** |
-| Kruskal-Wallis (HbA1c reduction by worst AE severity) | H=35.41, **p<0.001** |
+| Welch's t-test (primary outcome score, Drug X vs Placebo) | t=18.05, **p<0.001**, means 60.19 vs 51.14 |
+| Cohen's d (effect size) | **d=0.81** (large effect) |
+| Chi-square (HbA1c <7% control at Week 24) | chi2=218.75, dof=1, **p<0.001** |
+| Chi-square (adverse event occurrence, any severity) | chi2=127.61, dof=1, **p<0.001** |
+| Chi-square (AE severity class distribution) | chi2=196.71, dof=2, **p<0.001** |
+| Kruskal-Wallis (HbA1c reduction by worst AE severity) | H=83.74, **p<0.001** |
 
 All values are computed live from the generated dataset via `scipy.stats` / `statsmodels` — none are hardcoded. Re-running `build_database` with a different seed will change these numbers, which is the point: the pipeline recomputes real statistics against whatever data currently lives in SQLite. Unit tests for the stats module are in `tests/test_statistical_tests.py` (run with `python -m pytest`).
 
@@ -117,16 +117,16 @@ Pipeline: SpaCy tokenization/lemmatization/stopword removal → domain-specific 
 
 | Metric | Value |
 |---|---|
-| Accuracy | **92.2%** |
-| Precision (macro) | 78.7% |
-| Recall (macro) | 94.9% |
-| F1 (macro) | **0.851** |
-| F1 (weighted) | 0.928 |
-| Train / test split | 2,400 / 600 notes (stratified) |
+| Accuracy | **92.7%** |
+| Precision (macro) | 78.0% |
+| Recall (macro) | 89.9% |
+| F1 (macro) | **0.829** |
+| F1 (weighted) | 0.932 |
+| Train / test split | 9,600 / 2,400 notes (stratified) |
 
 Recall is deliberately prioritized over precision (`class_weight="balanced"`): in a pharmacovigilance context, a missed real adverse event is far costlier than a false alarm a clinician reviews and dismisses.
 
-**Business impact — NLP vs. manual CRF coding (held-out test set):** of adverse events present in the clinical note text but never logged in the structured case-report form (a real-world under-reporting failure mode simulated in the synthetic data), the NLP classifier recovered **100% of the 19 manually-missed cases**, and flagged 79.5% more adverse-event notes overall than manual coding alone caught.
+**Business impact — NLP vs. manual CRF coding (held-out test set):** of adverse events present in the clinical note text but never logged in the structured case-report form (a real-world under-reporting failure mode simulated in the synthetic data), the NLP classifier recovered **96.9% of the 97 manually-missed cases** (94 of 97), and flagged 89.4% more adverse-event notes overall than manual coding alone caught.
 
 Logistic Regression was chosen over a higher-capacity model (Random Forest/XGBoost) because the bag-of-lemmas feature space is close to linearly separable, and its coefficients pair directly with SHAP's linear explainer for the interpretability work in Step 5.
 
@@ -140,13 +140,13 @@ python -m src.explainability.run_shap_analysis
 
 Multinomial Logistic Regression gives one coefficient vector per class, so each class's score is an exact linear function of the TF-IDF vector — SHAP's `LinearExplainer` is built directly from that per-class coefficient row rather than approximating a black box. This is the direct payoff of choosing Logistic Regression over a higher-capacity model in Step 4.
 
-**Global — top words driving Severe AE classification:** `review`, `pending`, `suspend`, `urgent`, `evaluation`, `chest`, `severe`, `safety assessment`, `hold` — all clinically sensible (they're the vocabulary of an investigator escalating and stopping a dose).
+**Global — top words driving Severe AE classification:** `pending`, `suspend`, `review`, `severe`, `urgent` — all clinically sensible (they're the vocabulary of an investigator escalating and stopping a dose).
 
 ![Global SHAP summary for Severe AE classification](docs/screenshots/shap_global_summary_severe_ae.png)
 
 **Local — auto-generated business narrative, real example note:**
-> *"Feeling unsteady on their feet serious enough to warrant an urgent evaluation this visit. Study drug held pending safety assessment."*
-> → "The words 'urgent', 'pending' and 'evaluation' were the strongest predictors of Severe AE classification in this note."
+> *"Severe chest pain reported at Week 4 visit. BP measured at 120/85 at this visit. Patient referred for further evaluation. Treatment temporarily suspended."*
+> → "The words 'pain report', 'severe' and 'suspend' were the strongest predictors of Severe AE classification in this note."
 
 ![Local SHAP waterfall explanation for a Severe AE note](docs/screenshots/shap_local_waterfall_severe_ae.png)
 
@@ -160,22 +160,21 @@ python -m src.clustering.run_clustering
 
 ## Patient clustering (real output)
 
-Features: age, BMI, baseline vitals (SBP/DBP), baseline HbA1c/LDL/eGFR, primary outcome score, and worst adverse-event severity encountered — standardized with `StandardScaler`. K was chosen by comparing silhouette scores for k=3 and k=4 (elbow curve computed for k=2..8); k=4 won (silhouette 0.089 vs 0.086).
+Features: age, BMI, baseline vitals (SBP/DBP), baseline HbA1c/LDL/eGFR, primary outcome score, and worst adverse-event severity encountered — standardized with `StandardScaler`. K was chosen by comparing silhouette scores for k=3 and k=4 (elbow curve computed for k=2..8); k=3 won (silhouette 0.082 vs 0.079).
 
 ![K-Means elbow method: inertia and silhouette vs k](docs/screenshots/clustering_elbow_method.png)
 
 | Cluster | n | Business label | Mean outcome score | Any-AE rate | Severe-AE rate | Dropout rate |
 |---|---|---|---|---|---|---|
-| 0 | 129 | **High Responders** | 61.5 | 49.6% | 0.0% | 7.8% |
-| 1 | 120 | **AE-Prone** | 48.3 | 99.2% | 38.3% | 40.8% |
-| 2 | 112 | Stable / Average Responders | 58.5 | 60.7% | 0.0% | 7.1% |
-| 3 | 139 | Non-Responders | 55.8 | 46.8% | 0.0% | 6.5% |
+| 0 | 748 | Non-Responders | 57.4 | 47.9% | 0.1% | 8.4% |
+| 1 | 772 | **High Responders** | 60.0 | 50.5% | 0.0% | 8.5% |
+| 2 | 480 | **AE-Prone** | 46.0 | 99.8% | 33.5% | 29.8% |
 
-**Business impact:** the AE-Prone cluster (24% of patients) accounted for 100% of severe adverse events and a 40.8% dropout rate — roughly 6x the rate of every other cluster — despite being only a quarter of the study population. Targeting this phenotype for closer monitoring is the single highest-leverage safety intervention available in this trial.
+**Business impact:** the AE-Prone cluster (24.0% of patients) accounts for 161 of the trial's 162 severe adverse events (99.4%) and a 29.8% dropout rate — roughly 3.5x the rate of every other cluster — despite being only a quarter of the study population. Targeting this phenotype for closer monitoring is the single highest-leverage safety intervention available in this trial.
 
 ![Patient clusters, PCA 2D projection](docs/screenshots/clustering_pca_scatter.png)
 
-The silhouette score (0.089) is intentionally reported as-is rather than tuned to look better: real patient phenotypes sit on a continuum rather than in tight, well-separated blobs, and the clusters are still business-actionable because their outcome/safety profiles differ sharply even where their PCA projections overlap.
+The silhouette score (0.082) is intentionally reported as-is rather than tuned to look better: real patient phenotypes sit on a continuum rather than in tight, well-separated blobs, and the clusters are still business-actionable because their outcome/safety profiles differ sharply even where their PCA projections overlap.
 
 Try the agents directly:
 
@@ -192,19 +191,18 @@ Three agents, each built with LangChain 1.x's `create_agent` (LangGraph-based to
 
 **Why not Bedrock in the deployed demo:** the project targets AWS Bedrock (see `.env.example`), and the Bedrock IAM/region/model wiring is real and tested — but Claude models on Bedrock also require an AWS Marketplace subscription, which itself requires a valid payment method on the AWS account. Rather than add billing for a portfolio project, the live demo runs on **Groq's free tier** (Llama 3.3 70B, no payment method required) through the exact same agent code. Swapping back to Bedrock once billing is set up is a one-line `.env` change — nothing in `src/agents/` references a provider SDK directly.
 
-**Agent 1 — Data Analysis Agent** (NL → SQL → execution → auto-chart). Real transcript:
+**Agent 1 — Data Analysis Agent** (NL → SQL → execution → auto-chart). Real transcript (rerun against the current 2,000-patient dataset — an earlier run against the original 500-patient dataset also caught the agent hallucinating a table name, getting a real SQL error back, and self-correcting to the true schema on its next turn, a genuine multi-step tool-calling recovery, not scripted):
 > Q: *"What is the average HbA1c reduction from baseline to Week 24 in the treatment arm vs placebo?"*
-> The agent first hallucinated a table name (`clinical_trial_data`), got a real SQL error back from the tool, and self-corrected to the actual schema on its next turn — a genuine multi-step tool-calling recovery, not scripted.
 > SQL: `SELECT AVG(CASE WHEN p.treatment_arm = 'Drug X' THEN v.hba1c - p.baseline_hba1c END) ... FROM visits v JOIN patients p ...`
-> A: *"The average HbA1c reduction ... in the treatment arm is -0.99, and in the placebo arm is -0.26."* (matches the stats module's independently-computed numbers)
+> A: *"The average HbA1c reduction ... in the treatment arm is -1.0607, and in the placebo arm is -0.25437."* (matches the stats module's independently-computed numbers)
 
-**Agent 2 — Clinical Notes Agent** (keyword/severity/week search → Claude summary → at-risk patient list). Real transcript:
+**Agent 2 — Clinical Notes Agent** (keyword/severity/week search → LLM summary → at-risk patient list). Real transcript:
 > Q: *"Summarise all severe adverse events in Week 4"*
-> A: *"...12 patients experienced severe adverse events during Week 4... Patient 35: Nausea requiring urgent evaluation. Patient 69: Dizziness requiring urgent evaluation..."* (13 real patient IDs extracted, each grounded in an actual retrieved note)
+> A: *"...severe adverse events reported during Week 4... included severe chest pain, elevated blood pressure, dizziness, light-headedness, nausea, and fatigue... Patient 16: Severe chest pain. Patient 52: Elevated blood pressure. Patient 153: Severe light-headedness..."* (38 real patient IDs extracted, each grounded in an actual retrieved note)
 
 **Agent 3 — Insight Generation Agent** (combines stats + clustering + classifier metrics + notes → executive report). Real transcript:
 > Q: *"What are the key safety signals in this trial, and which patient subgroup should we prioritize for monitoring?"*
-> A: *"...higher rate of adverse events in the Drug X arm (63.2% vs 48.8%, p < 0.001)... AE-Prone cluster... comprises 120 patients (24% of the total population)... AE classifier has demonstrated high accuracy (92.17%) and recall (94.87%)... 79.5% uplift in detected adverse events compared to manual coding."*
+> A: *"...73.7% of patients in the treatment arm experiencing an adverse event compared to 49% in the placebo arm... chi-square test... (chi2=127.61, dof=1, p<0.001)... The K-Means clustering analysis identified three patient subgroups... The AE-Prone subgroup had the highest severe adverse event rate (33.5%) and the highest dropout rate (29.8%)... AE classifier's performance metrics showed an accuracy of 92.71%... F1 score of 82.91%... detected 89.4% more adverse events than manual coding, with a recovery rate of 96.9%..."*
 
 A lightweight LLM-based router (`src/agents/router.py`) classifies each incoming question into `data_analysis` / `clinical_notes` / `insight` with a single fast model call and dispatches to the matching agent — this is what the Streamlit chat page uses.
 
@@ -228,8 +226,8 @@ Six pages, covering all three interaction modes from the top of this README:
 |---|---|---|
 | 1. Trial Overview | auto-loads | KPI cards, primary-endpoint comparison with real p-value, demographics |
 | 2. Chat with Trial Data | Chatbot | Routes to one of the 3 agents; shows the SQL used + auto-chart for transparency |
-| 3. Cohort Explorer | Form-based | Sidebar filters → instant lab trends, AE profile, stats vs. full population, Claude cohort summary, CSV export |
-| 4. Clinical Notes Analyser | Chat/Form | Paste a note → classification + NER + SHAP + Claude recommended action; or search existing notes |
+| 3. Cohort Explorer | Form-based | Sidebar filters → instant lab trends, AE profile, stats vs. full population, LLM-generated cohort summary, CSV export |
+| 4. Clinical Notes Analyser | Chat/Form | Paste a note → classification + NER + SHAP + LLM-recommended action; or search existing notes |
 | 5. Upload and Integrate | Upload | New patient CSV or notes CSV → validated, NLP-classified, appended to SQLite, instantly queryable everywhere else |
 | 6. Executive Report | Download | Compiles the ReportLab PDF on demand, live in the browser |
 
