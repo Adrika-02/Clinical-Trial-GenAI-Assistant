@@ -119,13 +119,28 @@ h1, h2, h3 { color: #0F172A; font-weight: 700; letter-spacing: -0.01em; }
 .kpi-card .kpi-value { color: #0F172A; font-size: 1.65rem; font-weight: 800; }
 
 section[data-testid="stSidebar"] { border-right: 1px solid #E2E8F0; }
+
+.stApp,
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+[data-testid="stMainBlockContainer"],
+body {
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22220%22%20height%3D%22400%22%20viewBox%3D%220%200%20220%20400%22%3E%0A%3Cpath%20d%3D%22M40%2C0%20C40%2C50%20100%2C50%20100%2C100%20C100%2C150%2040%2C150%2040%2C200%20C40%2C250%20100%2C250%20100%2C300%20C100%2C350%2040%2C350%2040%2C400%22%20fill%3D%22none%22%20stroke%3D%22rgba%2837%2C99%2C235%2C0.05%29%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22/%3E%0A%3Cpath%20d%3D%22M100%2C0%20C100%2C50%2040%2C50%2040%2C100%20C40%2C150%20100%2C150%20100%2C200%20C100%2C250%2040%2C250%2040%2C300%20C40%2C350%20100%2C350%20100%2C400%22%20fill%3D%22none%22%20stroke%3D%22rgba%2814%2C165%2C233%2C0.05%29%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22/%3E%0A%3Cline%20x1%3D%2240%22%20y1%3D%220%22%20x2%3D%22100%22%20y2%3D%220%22%20stroke%3D%22rgba%2837%2C99%2C235%2C0.045%29%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22/%3E%0A%3Cline%20x1%3D%2240%22%20y1%3D%22100%22%20x2%3D%22100%22%20y2%3D%22100%22%20stroke%3D%22rgba%2837%2C99%2C235%2C0.045%29%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22/%3E%0A%3Cline%20x1%3D%2240%22%20y1%3D%22200%22%20x2%3D%22100%22%20y2%3D%22200%22%20stroke%3D%22rgba%2837%2C99%2C235%2C0.045%29%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22/%3E%0A%3Cline%20x1%3D%2240%22%20y1%3D%22300%22%20x2%3D%22100%22%20y2%3D%22300%22%20stroke%3D%22rgba%2837%2C99%2C235%2C0.045%29%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22/%3E%0A%3Cline%20x1%3D%2240%22%20y1%3D%22400%22%20x2%3D%22100%22%20y2%3D%22400%22%20stroke%3D%22rgba%2837%2C99%2C235%2C0.045%29%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22/%3E%0A%3Ccircle%20cx%3D%2270%22%20cy%3D%2250%22%20r%3D%224%22%20fill%3D%22rgba%2814%2C165%2C233%2C0.05%29%22/%3E%0A%3Ccircle%20cx%3D%2270%22%20cy%3D%22150%22%20r%3D%224%22%20fill%3D%22rgba%2814%2C165%2C233%2C0.05%29%22/%3E%0A%3Ccircle%20cx%3D%2270%22%20cy%3D%22250%22%20r%3D%224%22%20fill%3D%22rgba%2814%2C165%2C233%2C0.05%29%22/%3E%0A%3Ccircle%20cx%3D%2270%22%20cy%3D%22350%22%20r%3D%224%22%20fill%3D%22rgba%2814%2C165%2C233%2C0.05%29%22/%3E%0A%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 220px 400px;
+    animation: dna-scroll 18s linear infinite;
+}
+@keyframes dna-scroll {
+    from { background-position: 0 0; }
+    to { background-position: 0 400px; }
+}
 </style>
 """
 
 
 def inject_theme_css():
-    """Inject shared fonts/colors/component CSS. Call once per page, right
-    after st.set_page_config()."""
+    """Inject shared fonts/colors/component CSS, including an animated DNA
+    background pattern. Call once per page, right after st.set_page_config()."""
     st.markdown(_THEME_CSS, unsafe_allow_html=True)
 
 
