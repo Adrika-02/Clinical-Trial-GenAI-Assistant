@@ -13,6 +13,7 @@ data/processed/*.csv
 models/saved/*.joblib
 models/saved/*.pkl
 models/shap_plots/*.png
+models/cluster_plots/*.png
 
 # Streamlit
 .streamlit/secrets.toml
