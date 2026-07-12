@@ -2,7 +2,7 @@
 
 *A GenAI-powered analytics platform for clinical trial data — built for the Life Sciences analytics domain.*
 
-> **Status: under active development.** This README is updated after each build step with real metrics (no placeholders). See [docs/architecture.md](docs/architecture.md) for the full system diagram.
+> **Status: complete and deployed.** Live demo: **https://clinical-trial-genai-assistant.streamlit.app**. This README is updated after each build step with real metrics (no placeholders). See [docs/architecture.md](docs/architecture.md) for the full system diagram.
 
 ## The problem
 
@@ -56,7 +56,7 @@ clinical-trial-genai-assistant/
 - [x] Step 8 — Streamlit dashboard (6 pages)
 - [x] Step 9 — PDF executive report
 - [x] Step 10 — Business impact metrics
-- [ ] Deployed live URL
+- [x] Deployed live URL — https://clinical-trial-genai-assistant.streamlit.app
 
 ## Business impact (headline numbers)
 
