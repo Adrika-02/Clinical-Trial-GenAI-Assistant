@@ -55,8 +55,17 @@ clinical-trial-genai-assistant/
 - [x] Step 7 — 3 LangChain agents (data analysis, clinical notes, insight generation)
 - [x] Step 8 — Streamlit dashboard (6 pages)
 - [x] Step 9 — PDF executive report
-- [ ] Step 10 — Business impact metrics
+- [x] Step 10 — Business impact metrics
 - [ ] Deployed live URL
+
+## Business impact (headline numbers)
+
+- **79.5% more adverse events detected** by the NLP classifier vs. manual CRF coding on the test set, recovering **100% of the 19 cases manual coding missed entirely**.
+- **Primary endpoint statistically significant**: Drug X +7.90 points vs. placebo (p < 0.001, Cohen's d = 0.71).
+- **AE-Prone patient cluster (24% of patients) accounts for 100% of severe adverse events** and a 40.8% dropout rate — the clearest, highest-leverage safety-monitoring target in the trial.
+- **Executive report compiles in under 20 seconds**, replacing a multi-day manual turnaround.
+
+Full breakdown with context: [docs/business_impact.md](docs/business_impact.md)
 
 ## How to run locally
 
