@@ -242,7 +242,13 @@ Six pages, covering all three interaction modes from the top of this README:
 
 All 6 pages were driven end-to-end with Playwright against a live `streamlit run` process to confirm they render and function (not just import-checked). Note: on a memory-constrained local machine, Page 4's full analyze→SHAP→LLM pipeline can occasionally hit a native-library race under heavy system memory pressure (spaCy/scikit-learn/SHAP initializing concurrently) — this is a host-resource artifact of a shared dev laptop, not an application bug: every piece of that pipeline (classification, SHAP, the LLM call) is independently verified correct via the CLI scripts and the PDF report generator above, which exercises the identical code path successfully. It is expected to behave normally on a dedicated deployment such as Streamlit Cloud.
 
-Further pipeline and app run instructions will be added as each step lands.
+## Resume bullets
+
+Two resume-ready bullets (plus shorter variants), built only from numbers verified in this README: [docs/resume_bullets.md](docs/resume_bullets.md)
+
+## Interview prep
+
+Five likely technical interview questions per component, with model answers grounded in this project's real output: [docs/interview_prep/](docs/interview_prep/)
 
 ## License
 
