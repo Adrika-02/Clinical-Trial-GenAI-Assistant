@@ -1,4 +1,5 @@
 """Shared data-access and styling helpers for the Streamlit dashboard."""
+import os
 import sqlite3
 import sys
 from pathlib import Path
@@ -8,6 +9,16 @@ import streamlit as st
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
+
+# On Streamlit Community Cloud there is no .env file — secrets are supplied via
+# st.secrets instead. Mirror them into os.environ so src/agents/bedrock_llm.py
+# and every other os.environ.get()/os.environ[...] call works unchanged locally
+# and in the cloud.
+try:
+    for _key, _value in st.secrets.items():
+        os.environ.setdefault(_key, str(_value))
+except (FileNotFoundError, KeyError):
+    pass
 
 from src.db.database import DEFAULT_DB_PATH
 
