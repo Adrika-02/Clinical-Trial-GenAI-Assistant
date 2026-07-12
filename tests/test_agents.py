@@ -28,7 +28,7 @@ def test_run_sql_query_executes_valid_select():
 
 
 def test_search_clinical_notes_filters_by_severity():
-    result = search_clinical_notes.invoke({"severity": "Severe AE", "limit": 5})
+    result = search_clinical_notes.invoke({"severity": "Severe AE", "limit": "5"})
     assert "Severe AE" in result or "No matching notes found." in result
 
 

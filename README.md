@@ -199,6 +199,14 @@ Three agents, each built with LangChain 1.x's `create_agent` (LangGraph-based to
 
 A lightweight LLM-based router (`src/agents/router.py`) classifies each incoming question into `data_analysis` / `clinical_notes` / `insight` with a single fast model call and dispatches to the matching agent — this is what the Streamlit chat page uses.
 
+## Executive PDF report (real output)
+
+```bash
+python -m src.reports.pdf_generator
+```
+
+A 4-page `ReportLab`-generated PDF combining every module above: trial demographics, primary/secondary endpoint statistics, safety profile, K-Means cluster table + PCA plot, AE classifier metrics + SHAP global summary, and a **live LLM-generated** "Top 5 Clinical Insights" + "Recommendations for Next Steps" section (Agent 3 called with the same tools as the chat agent — nothing hardcoded). See [docs/sample_executive_report.pdf](docs/sample_executive_report.pdf) for a real generated example.
+
 Further pipeline and app run instructions will be added as each step lands.
 
 ## License

@@ -75,15 +75,21 @@ def run_sql_query(sql: str) -> str:
 
 
 @tool
-def search_clinical_notes(keyword: str = "", severity: str = "", visit_week: int = -1, limit: int = 15) -> str:
+def search_clinical_notes(keyword: str = "", severity: str = "", visit_week: str = "", limit: str = "15") -> str:
     """Search clinical notes by keyword, AE severity class, and/or visit week.
 
     Args:
         keyword: substring to search for in note text (case-insensitive), or empty to skip.
         severity: filter to 'No AE', 'Mild AE', or 'Severe AE' (true_ae_class), or empty to skip.
-        visit_week: filter to one visit week (0, 2, 4, 8, 12, or 24), or -1 to skip.
-        limit: max number of notes to return.
+        visit_week: filter to one visit week as a string, e.g. "4" (valid: 0, 2, 4, 8, 12, 24), or empty to skip.
+        limit: max number of notes to return, as a string, e.g. "15".
     """
+    # visit_week/limit are typed as str (not int) because some models emit numeric
+    # tool-call arguments as JSON strings, which strict provider-side schema
+    # validation (e.g. Groq) rejects outright for a declared integer parameter.
+    parsed_week = int(visit_week) if str(visit_week).strip().lstrip("-").isdigit() else -1
+    parsed_limit = int(limit) if str(limit).strip().isdigit() else 15
+
     conn = sqlite3.connect(DEFAULT_DB_PATH)
     query = "SELECT patient_id, visit_week, note_text, true_ae_class FROM clinical_notes WHERE 1=1"
     params = []
@@ -93,10 +99,10 @@ def search_clinical_notes(keyword: str = "", severity: str = "", visit_week: int
     if severity:
         query += " AND true_ae_class = ?"
         params.append(severity)
-    if visit_week >= 0:
+    if parsed_week >= 0:
         query += " AND visit_week = ?"
-        params.append(visit_week)
-    query += f" LIMIT {int(limit)}"
+        params.append(parsed_week)
+    query += f" LIMIT {parsed_limit}"
 
     df = pd.read_sql(query, conn, params=params)
     conn.close()
