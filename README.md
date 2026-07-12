@@ -52,7 +52,7 @@ clinical-trial-genai-assistant/
 - [x] Step 4 — NLP adverse event classifier (SpaCy preprocessing + medical NER, TF-IDF + Logistic Regression, 92.2% accuracy / 0.851 F1-macro)
 - [x] Step 5 — SHAP explainability (global + local, per-class linear explainer)
 - [x] Step 6 — K-Means patient clustering (k=4, silhouette=0.089, PCA projection)
-- [ ] Step 7 — LangChain agents (AWS Bedrock)
+- [x] Step 7 — 3 LangChain agents (data analysis, clinical notes, insight generation)
 - [ ] Step 8 — Streamlit dashboard (6 pages)
 - [ ] Step 9 — PDF executive report
 - [ ] Step 10 — Business impact metrics
@@ -167,6 +167,37 @@ Features: age, BMI, baseline vitals (SBP/DBP), baseline HbA1c/LDL/eGFR, primary 
 ![Patient clusters, PCA 2D projection](docs/screenshots/clustering_pca_scatter.png)
 
 The silhouette score (0.089) is intentionally reported as-is rather than tuned to look better: real patient phenotypes sit on a continuum rather than in tight, well-separated blobs, and the clusters are still business-actionable because their outcome/safety profiles differ sharply even where their PCA projections overlap.
+
+Try the agents directly:
+
+```bash
+python -m src.agents.data_analysis_agent
+python -m src.agents.clinical_notes_agent
+python -m src.agents.insight_agent
+python -m src.agents.router
+```
+
+## LangChain agents (real output, live model calls)
+
+Three agents, each built with LangChain 1.x's `create_agent` (LangGraph-based tool-calling loop), backed by a swappable LLM factory (`src/agents/bedrock_llm.py`) selected by a single `LLM_PROVIDER` env var — `bedrock`, `anthropic`, or `groq` — so every agent works unmodified regardless of which is active.
+
+**Why not Bedrock in the deployed demo:** the project targets AWS Bedrock (see `.env.example`), and the Bedrock IAM/region/model wiring is real and tested — but Claude models on Bedrock also require an AWS Marketplace subscription, which itself requires a valid payment method on the AWS account. Rather than add billing for a portfolio project, the live demo runs on **Groq's free tier** (Llama 3.3 70B, no payment method required) through the exact same agent code. Swapping back to Bedrock once billing is set up is a one-line `.env` change — nothing in `src/agents/` references a provider SDK directly.
+
+**Agent 1 — Data Analysis Agent** (NL → SQL → execution → auto-chart). Real transcript:
+> Q: *"What is the average HbA1c reduction from baseline to Week 24 in the treatment arm vs placebo?"*
+> The agent first hallucinated a table name (`clinical_trial_data`), got a real SQL error back from the tool, and self-corrected to the actual schema on its next turn — a genuine multi-step tool-calling recovery, not scripted.
+> SQL: `SELECT AVG(CASE WHEN p.treatment_arm = 'Drug X' THEN v.hba1c - p.baseline_hba1c END) ... FROM visits v JOIN patients p ...`
+> A: *"The average HbA1c reduction ... in the treatment arm is -0.99, and in the placebo arm is -0.26."* (matches the stats module's independently-computed numbers)
+
+**Agent 2 — Clinical Notes Agent** (keyword/severity/week search → Claude summary → at-risk patient list). Real transcript:
+> Q: *"Summarise all severe adverse events in Week 4"*
+> A: *"...12 patients experienced severe adverse events during Week 4... Patient 35: Nausea requiring urgent evaluation. Patient 69: Dizziness requiring urgent evaluation..."* (13 real patient IDs extracted, each grounded in an actual retrieved note)
+
+**Agent 3 — Insight Generation Agent** (combines stats + clustering + classifier metrics + notes → executive report). Real transcript:
+> Q: *"What are the key safety signals in this trial, and which patient subgroup should we prioritize for monitoring?"*
+> A: *"...higher rate of adverse events in the Drug X arm (63.2% vs 48.8%, p < 0.001)... AE-Prone cluster... comprises 120 patients (24% of the total population)... AE classifier has demonstrated high accuracy (92.17%) and recall (94.87%)... 79.5% uplift in detected adverse events compared to manual coding."*
+
+A lightweight LLM-based router (`src/agents/router.py`) classifies each incoming question into `data_analysis` / `clinical_notes` / `insight` with a single fast model call and dispatches to the matching agent — this is what the Streamlit chat page uses.
 
 Further pipeline and app run instructions will be added as each step lands.
 
