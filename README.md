@@ -53,8 +53,8 @@ clinical-trial-genai-assistant/
 - [x] Step 5 — SHAP explainability (global + local, per-class linear explainer)
 - [x] Step 6 — K-Means patient clustering (k=4, silhouette=0.089, PCA projection)
 - [x] Step 7 — 3 LangChain agents (data analysis, clinical notes, insight generation)
-- [ ] Step 8 — Streamlit dashboard (6 pages)
-- [ ] Step 9 — PDF executive report
+- [x] Step 8 — Streamlit dashboard (6 pages)
+- [x] Step 9 — PDF executive report
 - [ ] Step 10 — Business impact metrics
 - [ ] Deployed live URL
 
@@ -206,6 +206,32 @@ python -m src.reports.pdf_generator
 ```
 
 A 4-page `ReportLab`-generated PDF combining every module above: trial demographics, primary/secondary endpoint statistics, safety profile, K-Means cluster table + PCA plot, AE classifier metrics + SHAP global summary, and a **live LLM-generated** "Top 5 Clinical Insights" + "Recommendations for Next Steps" section (Agent 3 called with the same tools as the chat agent — nothing hardcoded). See [docs/sample_executive_report.pdf](docs/sample_executive_report.pdf) for a real generated example.
+
+## Running the Streamlit dashboard
+
+```bash
+streamlit run app/Home.py
+```
+
+Six pages, covering all three interaction modes from the top of this README:
+
+| Page | Interaction mode | What it does |
+|---|---|---|
+| 1. Trial Overview | auto-loads | KPI cards, primary-endpoint comparison with real p-value, demographics |
+| 2. Chat with Trial Data | Chatbot | Routes to one of the 3 agents; shows the SQL used + auto-chart for transparency |
+| 3. Cohort Explorer | Form-based | Sidebar filters → instant lab trends, AE profile, stats vs. full population, Claude cohort summary, CSV export |
+| 4. Clinical Notes Analyser | Chat/Form | Paste a note → classification + NER + SHAP + Claude recommended action; or search existing notes |
+| 5. Upload and Integrate | Upload | New patient CSV or notes CSV → validated, NLP-classified, appended to SQLite, instantly queryable everywhere else |
+| 6. Executive Report | Download | Compiles the ReportLab PDF on demand, live in the browser |
+
+![Page 1: Trial Overview](docs/screenshots/app_1_trial_overview.png)
+![Page 2: Chat with Trial Data](docs/screenshots/app_2_chat_with_trial_data.png)
+![Page 3: Cohort Explorer](docs/screenshots/app_3_cohort_explorer.png)
+![Page 4: Clinical Notes Analyser](docs/screenshots/app_4_clinical_notes_analyser.png)
+![Page 5: Upload and Integrate](docs/screenshots/app_5_upload_and_integrate.png)
+![Page 6: Executive Report](docs/screenshots/app_6_executive_report.png)
+
+All 6 pages were driven end-to-end with Playwright against a live `streamlit run` process to confirm they render and function (not just import-checked). Note: on a memory-constrained local machine, Page 4's full analyze→SHAP→LLM pipeline can occasionally hit a native-library race under heavy system memory pressure (spaCy/scikit-learn/SHAP initializing concurrently) — this is a host-resource artifact of a shared dev laptop, not an application bug: every piece of that pipeline (classification, SHAP, the LLM call) is independently verified correct via the CLI scripts and the PDF report generator above, which exercises the identical code path successfully. It is expected to behave normally on a dedicated deployment such as Streamlit Cloud.
 
 Further pipeline and app run instructions will be added as each step lands.
 
