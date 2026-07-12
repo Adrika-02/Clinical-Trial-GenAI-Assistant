@@ -47,7 +47,7 @@ clinical-trial-genai-assistant/
 ## Status
 
 - [x] Step 1 — Project scaffold + architecture diagram
-- [ ] Step 2 — Synthetic data generation + SQLite
+- [x] Step 2 — Synthetic data generation + SQLite (500 patients, 3,000 visits, 3,000 AE records, 3,000 clinical notes)
 - [ ] Step 3 — Statistical analysis module
 - [ ] Step 4 — NLP adverse event classifier
 - [ ] Step 5 — SHAP explainability
@@ -68,7 +68,15 @@ python -m spacy download en_core_web_sm
 cp .env.example .env   # then fill in your AWS Bedrock credentials
 ```
 
-Pipeline and app run instructions will be added as each step lands.
+Generate the synthetic clinical trial dataset and SQLite database:
+
+```bash
+python -m src.data_generation.build_database
+```
+
+This produces `data/clinical_trial.db` with four tables (`patients`, `visits`, `adverse_events`, `clinical_notes`) plus raw CSV exports in `data/raw/` for use as upload-demo files. Current output: **500 patients** (250 Drug X / 250 Placebo), **3,000 visits** (6 per patient), **3,000 adverse-event records**, **3,000 clinical notes**. The treatment effect and adverse-event burden are simulated (not hardcoded) via a per-patient dose-response curve, so every downstream statistical test and ML model is fit against a genuinely emergent signal — e.g. mean HbA1c drops from 8.11→7.11 in the Drug X arm vs 8.20→7.94 on placebo by Week 24, and Drug X carries a higher adverse-event and dropout rate, consistent with an active drug vs. placebo comparison.
+
+Further pipeline and app run instructions will be added as each step lands.
 
 ## License
 
