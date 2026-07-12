@@ -51,7 +51,8 @@ CREATE TABLE IF NOT EXISTS clinical_notes (
     visit_week INTEGER NOT NULL,
     note_date TEXT NOT NULL,
     note_text TEXT NOT NULL,
-    manually_coded_ae TEXT NOT NULL,
+    true_ae_class TEXT NOT NULL CHECK (true_ae_class IN ('No AE', 'Mild AE', 'Severe AE')),
+    manually_coded_ae TEXT NOT NULL CHECK (manually_coded_ae IN ('No AE', 'Mild AE', 'Severe AE')),
     FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
 );
 

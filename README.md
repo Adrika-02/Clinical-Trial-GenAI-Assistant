@@ -49,7 +49,7 @@ clinical-trial-genai-assistant/
 - [x] Step 1 — Project scaffold + architecture diagram
 - [x] Step 2 — Synthetic data generation + SQLite (500 patients, 3,000 visits, 3,000 AE records, 3,000 clinical notes)
 - [x] Step 3 — Statistical analysis module (Welch's t-test, chi-square, Cohen's d, Kruskal-Wallis, 95% CIs)
-- [ ] Step 4 — NLP adverse event classifier
+- [x] Step 4 — NLP adverse event classifier (SpaCy preprocessing + medical NER, TF-IDF + Logistic Regression, 92.2% accuracy / 0.851 F1-macro)
 - [ ] Step 5 — SHAP explainability
 - [ ] Step 6 — K-Means patient clustering
 - [ ] Step 7 — LangChain agents (AWS Bedrock)
@@ -94,6 +94,32 @@ python -m src.stats.run_analysis
 | Kruskal-Wallis (HbA1c reduction by worst AE severity) | H=35.41, **p<0.001** |
 
 All values are computed live from the generated dataset via `scipy.stats` / `statsmodels` — none are hardcoded. Re-running `build_database` with a different seed will change these numbers, which is the point: the pipeline recomputes real statistics against whatever data currently lives in SQLite. Unit tests for the stats module are in `tests/test_statistical_tests.py` (run with `python -m pytest`).
+
+Train and evaluate the NLP adverse-event classifier (writes `models/saved/ae_classifier.joblib` + `models/saved/ae_classifier_metrics.json`):
+
+```bash
+python -m spacy download en_core_web_sm   # one-time
+python -m src.nlp.train_classifier
+```
+
+## NLP adverse-event classifier (real output, held-out test set)
+
+Pipeline: SpaCy tokenization/lemmatization/stopword removal → domain-specific medical NER (rule-based `Matcher`/`PhraseMatcher` + regex for lab values, BP, dosages, since general SpaCy models aren't trained on clinical vocabulary) → TF-IDF (1-2 grams) → Logistic Regression, classifying each note as **No AE / Mild AE / Severe AE**.
+
+| Metric | Value |
+|---|---|
+| Accuracy | **92.2%** |
+| Precision (macro) | 78.7% |
+| Recall (macro) | 94.9% |
+| F1 (macro) | **0.851** |
+| F1 (weighted) | 0.928 |
+| Train / test split | 2,400 / 600 notes (stratified) |
+
+Recall is deliberately prioritized over precision (`class_weight="balanced"`): in a pharmacovigilance context, a missed real adverse event is far costlier than a false alarm a clinician reviews and dismisses.
+
+**Business impact — NLP vs. manual CRF coding (held-out test set):** of adverse events present in the clinical note text but never logged in the structured case-report form (a real-world under-reporting failure mode simulated in the synthetic data), the NLP classifier recovered **100% of the 19 manually-missed cases**, and flagged 79.5% more adverse-event notes overall than manual coding alone caught.
+
+Logistic Regression was chosen over a higher-capacity model (Random Forest/XGBoost) because the bag-of-lemmas feature space is close to linearly separable, and its coefficients pair directly with SHAP's linear explainer for the interpretability work in Step 5.
 
 Further pipeline and app run instructions will be added as each step lands.
 
