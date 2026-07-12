@@ -15,16 +15,17 @@ sys.path.insert(0, str(APP_DIR))
 from utils import APP_TITLE, page_header
 
 st.set_page_config(page_title=f"Executive Report — {APP_TITLE}", page_icon="📄", layout="wide")
-page_header("📄 Executive Report", "Auto-compiled PDF: overview, endpoint statistics, safety profile, clusters, SHAP, and Claude-generated insights.")
+page_header("📄 Executive Report", "Auto-compiled PDF: overview, endpoint statistics, safety profile, clusters, SHAP, and AI-generated insights.")
 
 st.write(
     "This report combines every module in the pipeline — the statistical analysis, K-Means "
     "patient clustering, the NLP adverse-event classifier and its SHAP explainability, and a "
-    "live Claude call (Agent 3) that generates the executive insights and recommendations "
-    "grounded in the real numbers above it."
+    "live LLM call (Agent 3, Insight Generation Agent — Groq-backed by default, swappable to "
+    "Claude via AWS Bedrock or the direct Anthropic API) that generates the executive insights "
+    "and recommendations grounded in the real numbers above it."
 )
 
-include_llm = st.checkbox("Include live Claude-generated insights (adds ~10-20s)", value=True)
+include_llm = st.checkbox("Include live AI-generated insights (adds ~10-20s)", value=True)
 
 if st.button("Generate Executive Report", type="primary"):
     from src.reports.pdf_generator import generate_executive_pdf, DEFAULT_OUTPUT_PATH

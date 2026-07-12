@@ -1,6 +1,6 @@
 """Page 4 — Clinical Notes Analyser (Interaction 2 continued).
-Mode A: paste a note -> AE classification + NER + SHAP explanation + Claude
-recommended action. Mode B: search existing notes by patient/week/keyword.
+Mode A: paste a note -> AE classification + NER + SHAP explanation + an
+LLM-recommended action. Mode B: search existing notes by patient/week/keyword.
 """
 import sys
 from pathlib import Path

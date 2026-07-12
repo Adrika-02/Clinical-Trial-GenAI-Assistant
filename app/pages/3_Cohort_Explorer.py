@@ -1,7 +1,7 @@
 """Page 3 — Cohort Explorer (Interaction 2: Form-based). Sidebar filters
 drive an instant cohort analysis: size, lab trends, AE profile, statistical
 comparison against the full trial population, and an auto-generated
-Claude cohort summary."""
+AI cohort summary (Groq-backed by default; swappable to Claude via Bedrock/Anthropic — see src/agents/bedrock_llm.py)."""
 import sys
 from pathlib import Path
 
@@ -91,7 +91,7 @@ else:
     st.info("Adjust filters to select a strict subset of the population for a comparison.")
 
 st.divider()
-st.subheader("Claude Cohort Summary")
+st.subheader("AI Cohort Summary")
 if st.button("Generate AI summary of this cohort"):
     from src.agents.bedrock_llm import get_llm
 
