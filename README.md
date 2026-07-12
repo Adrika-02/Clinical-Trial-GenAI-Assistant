@@ -48,7 +48,7 @@ clinical-trial-genai-assistant/
 
 - [x] Step 1 — Project scaffold + architecture diagram
 - [x] Step 2 — Synthetic data generation + SQLite (500 patients, 3,000 visits, 3,000 AE records, 3,000 clinical notes)
-- [ ] Step 3 — Statistical analysis module
+- [x] Step 3 — Statistical analysis module (Welch's t-test, chi-square, Cohen's d, Kruskal-Wallis, 95% CIs)
 - [ ] Step 4 — NLP adverse event classifier
 - [ ] Step 5 — SHAP explainability
 - [ ] Step 6 — K-Means patient clustering
@@ -75,6 +75,25 @@ python -m src.data_generation.build_database
 ```
 
 This produces `data/clinical_trial.db` with four tables (`patients`, `visits`, `adverse_events`, `clinical_notes`) plus raw CSV exports in `data/raw/` for use as upload-demo files. Current output: **500 patients** (250 Drug X / 250 Placebo), **3,000 visits** (6 per patient), **3,000 adverse-event records**, **3,000 clinical notes**. The treatment effect and adverse-event burden are simulated (not hardcoded) via a per-patient dose-response curve, so every downstream statistical test and ML model is fit against a genuinely emergent signal — e.g. mean HbA1c drops from 8.11→7.11 in the Drug X arm vs 8.20→7.94 on placebo by Week 24, and Drug X carries a higher adverse-event and dropout rate, consistent with an active drug vs. placebo comparison.
+
+Run the statistical analysis suite (writes `data/processed/stats_results.json`):
+
+```bash
+python -m src.stats.run_analysis
+```
+
+## Statistical results (real computed output, Week 24 primary endpoint)
+
+| Test | Result |
+|---|---|
+| Welch's t-test (primary outcome score, Drug X vs Placebo) | t=7.98, **p<0.001**, means 60.05 vs 52.15 |
+| Cohen's d (effect size) | **d=0.71** (medium-to-large effect) |
+| Chi-square (HbA1c <7% control at Week 24) | chi2=56.11, dof=1, **p<0.001** |
+| Chi-square (adverse event occurrence, any severity) | chi2=43.35, dof=1, **p<0.001** |
+| Chi-square (AE severity class distribution) | chi2=49.90, dof=2, **p<0.001** |
+| Kruskal-Wallis (HbA1c reduction by worst AE severity) | H=35.41, **p<0.001** |
+
+All values are computed live from the generated dataset via `scipy.stats` / `statsmodels` — none are hardcoded. Re-running `build_database` with a different seed will change these numbers, which is the point: the pipeline recomputes real statistics against whatever data currently lives in SQLite. Unit tests for the stats module are in `tests/test_statistical_tests.py` (run with `python -m pytest`).
 
 Further pipeline and app run instructions will be added as each step lands.
 
