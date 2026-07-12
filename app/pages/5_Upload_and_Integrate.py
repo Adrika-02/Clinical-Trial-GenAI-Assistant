@@ -14,9 +14,10 @@ PROJECT_ROOT = APP_DIR.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(APP_DIR))
 
-from utils import APP_TITLE, page_header, get_connection, clear_all_caches
+from utils import APP_TITLE, page_header, get_connection, clear_all_caches, inject_theme_css
 
 st.set_page_config(page_title=f"Upload — {APP_TITLE}", page_icon="📤", layout="wide")
+inject_theme_css()
 page_header("📤 Upload and Integrate", "Add new patient records or clinical notes — instantly queryable everywhere else in the app.")
 
 REQUIRED_PATIENT_COLS = [

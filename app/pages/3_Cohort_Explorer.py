@@ -13,10 +13,11 @@ PROJECT_ROOT = APP_DIR.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(APP_DIR))
 
-from utils import APP_TITLE, load_patients, load_visits, load_adverse_events, page_header
+from utils import APP_TITLE, load_patients, load_visits, load_adverse_events, page_header, inject_theme_css
 from src.stats.statistical_tests import welch_t_test, confidence_interval
 
 st.set_page_config(page_title=f"Cohort Explorer — {APP_TITLE}", page_icon="🔎", layout="wide")
+inject_theme_css()
 page_header("🔎 Cohort Explorer", "Filter patients by criteria for an instant, statistically-grounded cohort analysis.")
 
 patients = load_patients()

@@ -12,9 +12,10 @@ PROJECT_ROOT = APP_DIR.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(APP_DIR))
 
-from utils import APP_TITLE, page_header
+from utils import APP_TITLE, page_header, inject_theme_css
 
 st.set_page_config(page_title=f"Executive Report — {APP_TITLE}", page_icon="📄", layout="wide")
+inject_theme_css()
 page_header("📄 Executive Report", "Auto-compiled PDF: overview, endpoint statistics, safety profile, clusters, SHAP, and AI-generated insights.")
 
 st.write(

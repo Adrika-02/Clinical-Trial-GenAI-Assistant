@@ -24,9 +24,10 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from utils import APP_TITLE, page_header, run_query
+from utils import APP_TITLE, page_header, run_query, inject_theme_css
 
 st.set_page_config(page_title=f"Notes Analyser — {APP_TITLE}", page_icon="📝", layout="wide")
+inject_theme_css()
 page_header("📝 Clinical Notes Analyser")
 
 

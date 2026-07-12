@@ -11,9 +11,10 @@ PROJECT_ROOT = APP_DIR.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(APP_DIR))
 
-from utils import APP_TITLE, page_header, render_chart
+from utils import APP_TITLE, page_header, render_chart, inject_theme_css
 
 st.set_page_config(page_title=f"Chat — {APP_TITLE}", page_icon="💬", layout="wide")
+inject_theme_css()
 page_header("💬 Chat with Trial Data", "Ask any question in plain English — no SQL or coding required.")
 
 SUGGESTED_QUESTIONS = [

@@ -13,9 +13,10 @@ PROJECT_ROOT = APP_DIR.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(APP_DIR))
 
-from utils import APP_TITLE, load_patients, load_visits, load_adverse_events, page_header
+from utils import APP_TITLE, load_patients, load_visits, load_adverse_events, inject_theme_css, hero_banner, kpi_card
 
 st.set_page_config(page_title=APP_TITLE, page_icon="🧪", layout="wide")
+inject_theme_css()
 
 STATS_PATH = PROJECT_ROOT / "data" / "processed" / "stats_results.json"
 
@@ -27,7 +28,11 @@ def _load_stats() -> dict:
         return json.load(f)
 
 
-page_header("🧪 Trial Overview", "Drug X vs. Placebo — Phase III Efficacy & Safety Trial")
+hero_banner(
+    "🧪 Trial Overview",
+    "Drug X vs. Placebo — Phase III Efficacy &amp; Safety Trial, analyzed end-to-end with real statistics, ML, and GenAI agents.",
+    chips=["Phase III", "500 Patients", "GenAI-Powered"],
+)
 
 patients = load_patients()
 visits = load_visits()
@@ -47,11 +52,15 @@ ae_ever = ae_with_arm.groupby("patient_id").agg(
 ).reset_index()
 overall_ae_rate = ae_ever["ae_occurred"].mean() * 100
 
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("Total Patients", f"{n_total}")
-col2.metric("Trial Completion Rate", f"{completion_rate:.1f}%")
-col3.metric("Patients with HbA1c < 7% (Wk 24)", f"{hba1c_control_rate:.1f}%")
-col4.metric("Overall Adverse Event Rate", f"{overall_ae_rate:.1f}%")
+st.markdown(
+    '<div class="kpi-row">'
+    + kpi_card("👥", "Total Patients", f"{n_total}")
+    + kpi_card("✅", "Trial Completion Rate", f"{completion_rate:.1f}%")
+    + kpi_card("🎯", "Patients with HbA1c &lt; 7% (Wk 24)", f"{hba1c_control_rate:.1f}%")
+    + kpi_card("⚠️", "Overall Adverse Event Rate", f"{overall_ae_rate:.1f}%")
+    + "</div>",
+    unsafe_allow_html=True,
+)
 
 st.divider()
 
