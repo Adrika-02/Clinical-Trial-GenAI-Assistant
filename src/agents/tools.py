@@ -14,6 +14,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.db.database import DEFAULT_DB_PATH
+from src.rag.retrieve import semantic_search
 
 STATS_PATH = PROJECT_ROOT / "data" / "processed" / "stats_results.json"
 CLUSTERING_PATH = PROJECT_ROOT / "data" / "processed" / "clustering_results.json"
@@ -112,6 +113,28 @@ def search_clinical_notes(keyword: str = "", severity: str = "", visit_week: str
     lines = [
         f"[patient {r.patient_id}, week {r.visit_week}, {r.true_ae_class}] {r.note_text}"
         for r in df.itertuples()
+    ]
+    return "\n".join(lines)
+
+
+@tool
+def search_clinical_notes_semantic(query: str, k: str = "5") -> str:
+    """Semantically search clinical notes for the passage(s) most relevant to a
+    natural-language question or description, even when there's no exact keyword
+    to filter on. Returns matching text with patient_id, visit_week, and note_date
+    for citation.
+
+    Args:
+        query: natural-language question or description of what to find.
+        k: number of chunks to retrieve, as a string, e.g. "5".
+    """
+    parsed_k = int(k) if str(k).strip().isdigit() else 5
+    hits = semantic_search(query, k=parsed_k)
+    if not hits:
+        return "No matching notes found."
+    lines = [
+        f"[patient {h['patient_id']}, week {h['visit_week']}, note_date {h['note_date']}] {h['text']}"
+        for h in hits
     ]
     return "\n".join(lines)
 

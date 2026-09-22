@@ -12,17 +12,21 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.agents.bedrock_llm import get_llm
-from src.agents.tools import search_clinical_notes
+from src.agents.tools import search_clinical_notes, search_clinical_notes_semantic
 
 SYSTEM_PROMPT = """You are a clinical safety reviewer summarizing investigator notes from a
-clinical trial. Use the search_clinical_notes tool to retrieve notes relevant to the
-user's question (filter by keyword, severity class, and/or visit week as appropriate).
+clinical trial. You have two tools:
+- search_clinical_notes: filter notes by keyword, severity class, and/or visit week.
+- search_clinical_notes_semantic: semantic search for a natural-language question or
+  description, useful when there's no exact keyword to filter on.
+Use whichever tool (or both) best retrieves notes relevant to the user's question.
 Severity classes are exactly: 'No AE', 'Mild AE', 'Severe AE'.
 
 Then write a concise plain-English summary of what the notes show, and list the specific
-patient IDs mentioned in the retrieved notes that a clinician should review, with a one-
-phrase reason each. Only reference patients and details that actually appeared in the
-tool results — never invent patient IDs or findings."""
+patient IDs mentioned in the retrieved notes that a clinician should review, citing each
+patient's visit_week alongside their patient_id, with a one-phrase reason each. Only
+reference patients and details that actually appeared in the tool results — never invent
+patient IDs, visit weeks, or findings."""
 
 _agent = None
 
@@ -30,7 +34,11 @@ _agent = None
 def _get_agent():
     global _agent
     if _agent is None:
-        _agent = create_agent(get_llm(), tools=[search_clinical_notes], system_prompt=SYSTEM_PROMPT)
+        _agent = create_agent(
+            get_llm(),
+            tools=[search_clinical_notes, search_clinical_notes_semantic],
+            system_prompt=SYSTEM_PROMPT,
+        )
     return _agent
 
 
