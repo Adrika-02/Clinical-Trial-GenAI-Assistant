@@ -1,0 +1,17 @@
+{
+  "config": {
+    "chunk_size": 200,
+    "overlap": 40,
+    "embedding_model": "all-MiniLM-L6-v2",
+    "collection_name": "clinical_notes"
+  },
+  "total_documents": 12000,
+  "total_chunks": 12000,
+  "mean_chunk_tokens": 34.93,
+  "p95_chunk_tokens": 52,
+  "max_chunk_tokens": 58,
+  "embedding_wall_clock_seconds": 6.148,
+  "chunks_per_second": 1951.8,
+  "index_size_bytes": 42296288,
+  "index_size_mb": 40.34
+}
